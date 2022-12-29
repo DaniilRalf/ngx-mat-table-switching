@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 
 import { NgxMatTableSwitchingDirective } from './ngx-mat-table-switching.directive';
 import {NgxMatTableSwitchingService} from "./ngx-mat-table-switching.service";
+import {NgxMatTableSwitchingComponent} from "./ngx-mat-table-switching.component";
 
 /**
  * Сервис инжектирован только на уровне данного модуля
@@ -11,6 +12,7 @@ import {NgxMatTableSwitchingService} from "./ngx-mat-table-switching.service";
 
 @NgModule({
   declarations: [
+    NgxMatTableSwitchingComponent,
     NgxMatTableSwitchingDirective
   ],
   imports: [
