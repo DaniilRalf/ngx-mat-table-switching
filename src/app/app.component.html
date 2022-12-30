@@ -1,5 +1,7 @@
 <mat-table [dataSource]="dataSource" class="mat-elevation-z8"
-           ngxMatTableSwitching [setType]="'table'">
+
+           ngxMatTableSwitching [setType]="'table'"
+>
 
   <!-- Name Column -->
   <ng-container matColumnDef="name">
@@ -21,6 +23,8 @@
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row *matRowDef="let row; let index = index; columns: displayedColumns;"
-           ngxMatTableSwitching [setType]="'row'"
+
+           ngxMatTableSwitching [setType]="'row'" [setIndexRow]="index" [setRow]="row"
+
   ></mat-row>
 </mat-table>

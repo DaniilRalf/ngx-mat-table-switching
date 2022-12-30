@@ -7,5 +7,7 @@ export class NgxMatTableSwitchingService {
   /* * Счетчик который изменяется в зависимости от перемещения по кномпам мыши и от клика по строчкам*/
   public displacementCounter = 0
 
+  public quantityRows = 0
+
   constructor() { }
 }
