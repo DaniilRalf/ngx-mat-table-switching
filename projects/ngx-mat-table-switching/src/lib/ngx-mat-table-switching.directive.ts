@@ -32,7 +32,7 @@ export class NgxMatTableSwitchingDirective implements OnInit, OnDestroy{
 
 
   /*? Выходные параметры================================================*/
-  // ==== Сделать оутпут активной строки
+      // ==== Сделать оутпут активной строки
   /*? Выходные параметры================================================*/
 
 
@@ -54,16 +54,23 @@ export class NgxMatTableSwitchingDirective implements OnInit, OnDestroy{
 
         }
 
+
         if (this.type === 'row') {
 
+          /* * Эмитим нужную строку*/
           if ((event.code === 'ArrowDown' || event.code === 'ArrowUp') && this.indexRow === this.ngxMatTableService.displacementCounter) {
-            console.log(this.row)
+            // ==== добавить тут эмитор нужной строки
+            // console.log(this.row)
+          }
+          if ((event.code === 'ArrowRight' || event.code === 'ArrowLeft') && this.indexRow === this.ngxMatTableService.displacementCounter) {
+            this.checkActiveCell()
           }
           this.checkActiveRow()
-
         }
 
+
       }
+
   /*? Слушатели=========================================================*/
 
 
@@ -73,6 +80,12 @@ export class NgxMatTableSwitchingDirective implements OnInit, OnDestroy{
   ) { }
 
   ngOnInit() {
+    /* * Эмитим нужную строку*/
+    if (this.indexRow === this.ngxMatTableService.displacementCounter) {
+      // ==== добавить тут эмитор нужной строки
+      // console.log(this.row)
+    }
+
     if (this.type === 'row') {
       /* * Находим колическво строк в таблице*/
       if (this.indexRow && this.ngxMatTableService.quantityRows < this.indexRow) {
@@ -90,6 +103,12 @@ export class NgxMatTableSwitchingDirective implements OnInit, OnDestroy{
     } else {
       this.activeRowTrigger = false
     }
+  }
+
+  checkActiveCell(): void {
+    console.log(this.element)
+    console.log(this.row)
+    // ==== ну и самое сложное ебануть тут преобразования
   }
 
   ngOnDestroy() {
