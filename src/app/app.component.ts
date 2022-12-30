@@ -41,4 +41,10 @@ export class AppComponent implements OnInit{
     // console.log(this.stuff.doStuff());
     // console.log(this.stuff.doStuffWithInput('stuff library with input'));
   }
+
+
+  clickTable(el: any, index: any) {
+    console.log(el)
+    console.log(index)
+  }
 }

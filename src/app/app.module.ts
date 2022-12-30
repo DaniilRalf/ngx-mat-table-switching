@@ -8,6 +8,7 @@ import {
 } from "../../projects/ngx-mat-table-switching/src/lib/ngx-mat-table-switching.module";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatTableModule} from "@angular/material/table";
+import {MatExpansionModule} from "@angular/material/expansion";
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import {MatTableModule} from "@angular/material/table";
     MatTableModule,
 
 
-    NgxMatTableSwitchingModule
+    NgxMatTableSwitchingModule,
+    MatExpansionModule
   ],
   providers: [],
   bootstrap: [AppComponent]
