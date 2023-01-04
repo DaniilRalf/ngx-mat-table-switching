@@ -69,14 +69,12 @@ export class NgxMatTableSwitchingDirective implements OnInit, OnDestroy{
             // console.log(this.row)
           }
           if ((event.code === 'ArrowRight' || event.code === 'ArrowLeft') && this.indexRow === this.ngxMatTableService.displacementRowCounter) {
+            /* * Заполняем нужную при клике ячейку*/
             this.checkActiveCell()
           }
           this.checkActiveRow()
         }
-
-
       }
-
   /*? Слушатели=========================================================*/
 
 
@@ -98,6 +96,11 @@ export class NgxMatTableSwitchingDirective implements OnInit, OnDestroy{
         this.ngxMatTableService.quantityRows = this.indexRow
       }
       this.checkActiveRow()
+    }
+
+    /* * Заполняем первую ячейку*/
+    if (this.indexRow === this.ngxMatTableService.displacementRowCounter) {
+      this.element.nativeElement.children[0].classList.add('active-class__switching-cell')
     }
   }
 
