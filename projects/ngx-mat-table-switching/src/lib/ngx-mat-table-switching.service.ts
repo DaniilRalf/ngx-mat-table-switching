@@ -13,5 +13,8 @@ export class NgxMatTableSwitchingService {
   /* * Счетчик ячеек который изменяется в зависимости от перемещения по кномпам мыши и от клика по строчкам*/
   public displacementCellCounter = 0
 
+  /* * Тэг активности режима перемещения*/
+  public tagActive!: boolean
+
   constructor() { }
 }

@@ -17,10 +17,7 @@ import {NgxMatTableSwitchingService} from "./ngx-mat-table-switching.service";
 export class NgxMatTableSwitchingDirective implements OnInit, OnDestroy{
 
   /** Добавляем или убираем активный класс СТРОКИ в зависимости от переменной*/
-  // ====   добавить в документацию названия классов
   @HostBinding('class.active-class__switching-row') activeRowTrigger = false;
-
-  @Output() onActiveData = new EventEmitter()
 
   private cellData!: string
 
@@ -50,65 +47,74 @@ export class NgxMatTableSwitchingDirective implements OnInit, OnDestroy{
       @Input() set setAvailableCell(data: string[]){
             this.availableCell = data
       }
+
+      /* * Ключ активности режима редактирования*/
+      @Input() set setTagActive(data: boolean){
+        if (this.type === 'table') {
+          this.ngxMatTableService.tagActive = data
+        }
+      }
   /*? Входные параметры=================================================*/
 
 
   /*? Выходные параметры================================================*/
-      // ==== Сделать оутпут активной строки
+      @Output() onActiveData = new EventEmitter()
   /*? Выходные параметры================================================*/
 
 
   /*? Слушатели=========================================================*/
       @HostListener('document:keydown', ['$event'])
       public onEvent(event: KeyboardEvent): void {
-        /*
-        * * Подстчет событий клика будет происходить на элементе таблицы
-        * * Высчитываем индекс активной строки
-        * */
-        if (this.type === 'table') {
+        if (this.ngxMatTableService.tagActive) {
+          /*
+       * * Подстчет событий клика будет происходить на элементе таблицы
+       * * Высчитываем индекс активной строки
+       * */
+          if (this.type === 'table') {
 
-          if (event.code === 'ArrowDown' && this.ngxMatTableService.displacementRowCounter < this.ngxMatTableService.quantityRows ) {
-            this.ngxMatTableService.displacementRowCounter ++
+            if (event.code === 'ArrowDown' && this.ngxMatTableService.displacementRowCounter < this.ngxMatTableService.quantityRows ) {
+              this.ngxMatTableService.displacementRowCounter ++
+            }
+            if (event.code === 'ArrowUp' && this.ngxMatTableService.displacementRowCounter > 0) {
+              this.ngxMatTableService.displacementRowCounter --
+            }
           }
-          if (event.code === 'ArrowUp' && this.ngxMatTableService.displacementRowCounter > 0) {
-            this.ngxMatTableService.displacementRowCounter --
-          }
-        }
 
-        if (this.type === 'row') {
-          /* * Вот на этом месте побегаемся по всем ячейкам строки, и чистим классы всех счеек перед тем как устаовит активный*/
-          if (event.code === 'ArrowDown'
-            || event.code === 'ArrowUp'
-            || event.code === 'ArrowLeft'
-            || event.code === 'ArrowRight') {
-            this.clearAllCell()
+          if (this.type === 'row') {
+            /* * Вот на этом месте побегаемся по всем ячейкам строки, и чистим классы всех счеек перед тем как устаовит активный*/
+            if (event.code === 'ArrowDown'
+              || event.code === 'ArrowUp'
+              || event.code === 'ArrowLeft'
+              || event.code === 'ArrowRight') {
+              this.clearAllCell()
+            }
+
+            /* * Эмитим нужную строку*/
+            if ((event.code === 'ArrowDown' || event.code === 'ArrowUp') && this.indexRow === this.ngxMatTableService.displacementRowCounter) {
+              this.checkActiveCell()
+            }
+            if ((event.code === 'ArrowLeft') && this.indexRow === this.ngxMatTableService.displacementRowCounter) {
+              /* * Заполняем нужную при клике ячейку*/
+              this.checkActiveCell('left')
+            }
+            if ((event.code === 'ArrowRight') && this.indexRow === this.ngxMatTableService.displacementRowCounter) {
+              /* * Заполняем нужную при клике ячейку*/
+              this.checkActiveCell('right')
+            }
+            this.checkActiveRow()
           }
 
           /* * Эмитим нужную строку*/
-          if ((event.code === 'ArrowDown' || event.code === 'ArrowUp') && this.indexRow === this.ngxMatTableService.displacementRowCounter) {
-            this.checkActiveCell()
+          if (event.code === 'Enter' && this.indexRow === this.ngxMatTableService.displacementRowCounter ) {
+            const activeData = {
+              cell: {
+                cell_element: this.cellElement,
+                cell_data: this.cellData,
+              },
+              row: this.row,
+            }
+            this.onActiveData.emit(activeData)
           }
-          if ((event.code === 'ArrowLeft') && this.indexRow === this.ngxMatTableService.displacementRowCounter) {
-            /* * Заполняем нужную при клике ячейку*/
-            this.checkActiveCell('left')
-          }
-          if ((event.code === 'ArrowRight') && this.indexRow === this.ngxMatTableService.displacementRowCounter) {
-            /* * Заполняем нужную при клике ячейку*/
-            this.checkActiveCell('right')
-          }
-          this.checkActiveRow()
-        }
-
-        /* * Эмитим нужную строку*/
-        if (event.code === 'Enter' && this.indexRow === this.ngxMatTableService.displacementRowCounter ) {
-          const activeData = {
-            cell: {
-              cell_element: this.cellElement,
-              cell_data: this.cellData,
-            },
-            row: this.row,
-          }
-          this.onActiveData.emit(activeData)
         }
       }
   /*? Слушатели=========================================================*/
