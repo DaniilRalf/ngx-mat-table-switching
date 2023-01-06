@@ -24,7 +24,8 @@
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row *matRowDef="let row; let index = index; columns: displayedColumns;"
 
-           ngxMatTableSwitching [setType]="'row'" [setIndexRow]="index" [setRow]="row" [setAvailableCell]="['name', 'weight']"
+           ngxMatTableSwitching [setType]="'row'" [setIndexRow]="index" [setRow]="row" [setAvailableCell]="['name', 'symbol']"
+           (onActiveData)="onActiveData($event)"
 
   ></mat-row>
 </mat-table>

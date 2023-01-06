@@ -1,4 +1,14 @@
-import {Directive, ElementRef, HostBinding, HostListener, Input, OnDestroy, OnInit} from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output
+} from '@angular/core';
 import {NgxMatTableSwitchingService} from "./ngx-mat-table-switching.service";
 
 @Directive({
@@ -9,6 +19,12 @@ export class NgxMatTableSwitchingDirective implements OnInit, OnDestroy{
   /** Добавляем или убираем активный класс СТРОКИ в зависимости от переменной*/
   // ====   добавить в документацию названия классов
   @HostBinding('class.active-class__switching-row') activeRowTrigger = false;
+
+  @Output() onActiveData = new EventEmitter()
+
+  private cellData!: string
+
+  private cellElement!: ElementRef
 
   /*? Входные параметры=================================================*/
       /* * Указываем тип элемента на который навешана деректива*/
@@ -57,22 +73,42 @@ export class NgxMatTableSwitchingDirective implements OnInit, OnDestroy{
           if (event.code === 'ArrowUp' && this.ngxMatTableService.displacementRowCounter > 0) {
             this.ngxMatTableService.displacementRowCounter --
           }
-
         }
 
-
         if (this.type === 'row') {
+          /* * Вот на этом месте побегаемся по всем ячейкам строки, и чистим классы всех счеек перед тем как устаовит активный*/
+          if (event.code === 'ArrowDown'
+            || event.code === 'ArrowUp'
+            || event.code === 'ArrowLeft'
+            || event.code === 'ArrowRight') {
+            this.clearAllCell()
+          }
 
           /* * Эмитим нужную строку*/
           if ((event.code === 'ArrowDown' || event.code === 'ArrowUp') && this.indexRow === this.ngxMatTableService.displacementRowCounter) {
-            // ==== добавить тут эмитор нужной строки
-            // console.log(this.row)
-          }
-          if ((event.code === 'ArrowRight' || event.code === 'ArrowLeft') && this.indexRow === this.ngxMatTableService.displacementRowCounter) {
-            /* * Заполняем нужную при клике ячейку*/
             this.checkActiveCell()
           }
+          if ((event.code === 'ArrowLeft') && this.indexRow === this.ngxMatTableService.displacementRowCounter) {
+            /* * Заполняем нужную при клике ячейку*/
+            this.checkActiveCell('left')
+          }
+          if ((event.code === 'ArrowRight') && this.indexRow === this.ngxMatTableService.displacementRowCounter) {
+            /* * Заполняем нужную при клике ячейку*/
+            this.checkActiveCell('right')
+          }
           this.checkActiveRow()
+        }
+
+        /* * Эмитим нужную строку*/
+        if (event.code === 'Enter' && this.indexRow === this.ngxMatTableService.displacementRowCounter ) {
+          const activeData = {
+            cell: {
+              cell_element: this.cellElement,
+              cell_data: this.cellData,
+            },
+            row: this.row,
+          }
+          this.onActiveData.emit(activeData)
         }
       }
   /*? Слушатели=========================================================*/
@@ -84,12 +120,6 @@ export class NgxMatTableSwitchingDirective implements OnInit, OnDestroy{
   ) { }
 
   ngOnInit() {
-    /* * Эмитим нужную строку*/
-    if (this.indexRow === this.ngxMatTableService.displacementRowCounter) {
-      // ==== добавить тут эмитор нужной строки
-      // console.log(this.row)
-    }
-
     if (this.type === 'row') {
       /* * Находим колическво строк в таблице*/
       if (this.indexRow && this.ngxMatTableService.quantityRows < this.indexRow) {
@@ -114,33 +144,45 @@ export class NgxMatTableSwitchingDirective implements OnInit, OnDestroy{
     }
   }
 
-  checkActiveCell(): void {
-    // ==== сделать отдельный лисьнер для кнопок влево в право
-    this.ngxMatTableService.displacementCellCounter++
-    // console.log(this.element)
-    // console.log(this.row)
-    // ==== ну и самое сложное ебануть тут преобразования
+  checkActiveCell(direction?: string): void {
+    if (direction === 'right') {
+      this.plusCell()
+    }
+    if (direction === 'left') {
+      this.minusCell()
+    }
 
     const  childrenOfRow = this.element.nativeElement.children
-    let index = 0;
+    /* * Пробегаемся по классам каждой ячейки с равниваем их с массивом чтомы передали в setAvailableCell
+     * * Тем самым высталяем приисходит "листание" ячеек в том порядке в коотром янас идутназвания колонок впереданном массиве */
+    for (let itemChildren of childrenOfRow) {
+      itemChildren.classList.forEach((item: any) => {
+        if (this.availableCell && item.includes(this.availableCell[this.ngxMatTableService.displacementCellCounter])){
+          itemChildren.classList.add('active-class__switching-cell')
+          this.cellData = itemChildren.innerText
+          this.cellElement = itemChildren
+        }
+      })
+    }
+  }
 
-
-    // ====переделать эту херню с поиска индекса на поиск названия класса
+  plusCell() {
+    /* * Плюсуем ячейку только если она не последняя*/
+    if ((this.ngxMatTableService.displacementCellCounter + 1) !== this.availableCell?.length) {
+      this.ngxMatTableService.displacementCellCounter++
+    }
+  }
+  minusCell() {
+    /* * Минусуем ячейку только если она не первая*/
+    if (this.ngxMatTableService.displacementCellCounter !== 0) {
+      this.ngxMatTableService.displacementCellCounter--
+    }
+  }
+  clearAllCell() {
+    const  childrenOfRow = this.element.nativeElement.children
     for (let itemChildren of childrenOfRow) {
       itemChildren.classList.remove('active-class__switching-cell')
     }
-    for (let itemChildren of childrenOfRow) {
-      if (this.ngxMatTableService.displacementCellCounter === index) {
-        itemChildren.classList.add('active-class__switching-cell')
-      }
-      console.log(this.ngxMatTableService.displacementCellCounter)
-      console.log(index)
-      index++
-    }
-
-    // ==== пример добавления класса на ячейку, добавить логику
-    // console.log(this.element.nativeElement.children[0].classList)
-    // this.element.nativeElement.children[0].classList.add('active-class__switching-cell')
   }
 
   ngOnDestroy() {

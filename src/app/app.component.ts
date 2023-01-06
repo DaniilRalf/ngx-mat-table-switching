@@ -47,4 +47,8 @@ export class AppComponent implements OnInit{
     console.log(el)
     console.log(index)
   }
+
+  onActiveData(data: any) {
+    console.log(data)
+  }
 }
