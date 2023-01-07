@@ -4,16 +4,16 @@ import { Injectable } from '@angular/core';
 
 export class NgxMatTableSwitchingService {
 
-  /* * Коллическтво строк в таблице*/
+  /* * Number of rows in the table */
   public quantityRows = 0
 
-  /* * Счетчик строк который изменяется в зависимости от перемещения по кномпам мыши и от клика по строчкам*/
+  /* * A line counter that changes depending on the movement of the mouse buttons and on the click on the lines */
   public displacementRowCounter = 0
 
-  /* * Счетчик ячеек который изменяется в зависимости от перемещения по кномпам мыши и от клика по строчкам*/
+  /* * The cell counter that changes depending on the movement of the mouse buttons and on the click on the lines */
   public displacementCellCounter = 0
 
-  /* * Тэг активности режима перемещения*/
+  /* * Travel mode activity tag*/
   public tagActive!: boolean
 
   constructor() { }

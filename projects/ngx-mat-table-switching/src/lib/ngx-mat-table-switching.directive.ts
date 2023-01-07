@@ -16,59 +16,59 @@ import {NgxMatTableSwitchingService} from "./ngx-mat-table-switching.service";
 })
 export class NgxMatTableSwitchingDirective implements OnInit, OnDestroy{
 
-  /** Добавляем или убираем активный класс СТРОКИ в зависимости от переменной*/
+  /* * Add or remove the active ROW class depending on the variable*/
   @HostBinding('class.active-class__switching-row') activeRowTrigger = false;
 
   private cellData!: string
 
   private cellElement!: ElementRef
 
-  /*? Входные параметры=================================================*/
-      /* * Указываем тип элемента на который навешана деректива*/
+  /*? Input parameters=================================================*/
+      /* * The type of the element pointed to by the directive*/
       type!: 'table' | 'row'
       @Input() set setType(data: 'table' | 'row') {
         this.type = data
       }
 
-      /* * Индекс строки*/
+      /* * Index ROW*/
       indexRow?: number
       @Input() set setIndexRow(data: number) {
         this.indexRow = data
       }
 
-      /* * Содержимое строки*/
+      /* * Content ROW*/
       row?: any
       @Input() set setRow(data: any) {
         this.row = data
       }
 
-      /* * Доступные для переключения ячейки*/
+      /* * CELLS available for switching*/
       availableCell?: string[]
       @Input() set setAvailableCell(data: string[]){
             this.availableCell = data
       }
 
-      /* * Ключ активности режима редактирования*/
+      /* * Edit Mode Status*/
       @Input() set setTagActive(data: boolean){
         if (this.type === 'table') {
           this.ngxMatTableService.tagActive = data
         }
       }
-  /*? Входные параметры=================================================*/
+  /*? Input parameters=================================================*/
 
 
-  /*? Выходные параметры================================================*/
+  /*? Output parameters================================================*/
       @Output() onActiveData = new EventEmitter()
-  /*? Выходные параметры================================================*/
+  /*? Output parameters================================================*/
 
 
-  /*? Слушатели=========================================================*/
+  /*? Listeners=========================================================*/
       @HostListener('document:keydown', ['$event'])
       public onEvent(event: KeyboardEvent): void {
         if (this.ngxMatTableService.tagActive) {
           /*
-       * * Подстчет событий клика будет происходить на элементе таблицы
-       * * Высчитываем индекс активной строки
+       * * Click events will be counted on the table element
+       * * Calculate the index of the active row
        * */
           if (this.type === 'table') {
 
@@ -81,7 +81,7 @@ export class NgxMatTableSwitchingDirective implements OnInit, OnDestroy{
           }
 
           if (this.type === 'row') {
-            /* * Вот на этом месте побегаемся по всем ячейкам строки, и чистим классы всех счеек перед тем как устаовит активный*/
+            /* * Iterate over all the cells in the row, and clear the classes of all cells before setting active*/
             if (event.code === 'ArrowDown'
               || event.code === 'ArrowUp'
               || event.code === 'ArrowLeft'
@@ -89,22 +89,19 @@ export class NgxMatTableSwitchingDirective implements OnInit, OnDestroy{
               this.clearAllCell()
             }
 
-            /* * Эмитим нужную строку*/
             if ((event.code === 'ArrowDown' || event.code === 'ArrowUp') && this.indexRow === this.ngxMatTableService.displacementRowCounter) {
               this.checkActiveCell()
             }
             if ((event.code === 'ArrowLeft') && this.indexRow === this.ngxMatTableService.displacementRowCounter) {
-              /* * Заполняем нужную при клике ячейку*/
               this.checkActiveCell('left')
             }
             if ((event.code === 'ArrowRight') && this.indexRow === this.ngxMatTableService.displacementRowCounter) {
-              /* * Заполняем нужную при клике ячейку*/
               this.checkActiveCell('right')
             }
             this.checkActiveRow()
           }
 
-          /* * Эмитим нужную строку*/
+          /* * Emit active ROW and CELL*/
           if (event.code === 'Enter' && this.indexRow === this.ngxMatTableService.displacementRowCounter ) {
             const activeData = {
               cell: {
@@ -117,7 +114,7 @@ export class NgxMatTableSwitchingDirective implements OnInit, OnDestroy{
           }
         }
       }
-  /*? Слушатели=========================================================*/
+  /*? Listeners=========================================================*/
 
 
   constructor(
@@ -127,23 +124,23 @@ export class NgxMatTableSwitchingDirective implements OnInit, OnDestroy{
 
   ngOnInit() {
     if (this.type === 'row') {
-      /* * Находим колическво строк в таблице*/
+      /* * Search how many ROWs in TABLE*/
       if (this.indexRow && this.ngxMatTableService.quantityRows < this.indexRow) {
         this.ngxMatTableService.quantityRows = this.indexRow
       }
       this.checkActiveRow()
     }
 
-    /* * Заполняем первую ячейку*/
+    /* * Stay active first CELL*/
     if (this.indexRow === this.ngxMatTableService.displacementRowCounter) {
       this.element.nativeElement.children[0].classList.add('active-class__switching-cell')
     }
   }
 
   checkActiveRow(): void {
-    /* * Сверяем индекс каждой строки
-    * Если индекс совпадает с высчитаным значением активной строки, помечаем эту строку активной*/
-    if (this.indexRow === this.ngxMatTableService.displacementRowCounter) {
+    /* * Check index ever ROW
+    * If the index matches the calculated value of the active row, mark this row as active*/
+    if (this.indexRow == this.ngxMatTableService.displacementRowCounter) {
       this.activeRowTrigger = true
     } else {
       this.activeRowTrigger = false
@@ -159,8 +156,8 @@ export class NgxMatTableSwitchingDirective implements OnInit, OnDestroy{
     }
 
     const  childrenOfRow = this.element.nativeElement.children
-    /* * Пробегаемся по классам каждой ячейки с равниваем их с массивом чтомы передали в setAvailableCell
-     * * Тем самым высталяем приисходит "листание" ячеек в том порядке в коотром янас идутназвания колонок впереданном массиве */
+    /* * Iterate over the list of classes of each cell and compare them with the array that we passed to 'setAvailableCell'
+     * * Thus, we expose the “paging” of the cells in the order in which we are given the names of the columns in the array passed */
     for (let itemChildren of childrenOfRow) {
       itemChildren.classList.forEach((item: any) => {
         if (this.availableCell && item.includes(this.availableCell[this.ngxMatTableService.displacementCellCounter])){
@@ -173,13 +170,13 @@ export class NgxMatTableSwitchingDirective implements OnInit, OnDestroy{
   }
 
   plusCell() {
-    /* * Плюсуем ячейку только если она не последняя*/
+    /* * PLUS -  CELL if it not last*/
     if ((this.ngxMatTableService.displacementCellCounter + 1) !== this.availableCell?.length) {
       this.ngxMatTableService.displacementCellCounter++
     }
   }
   minusCell() {
-    /* * Минусуем ячейку только если она не первая*/
+    /* * MINUS -  CELL if it not first*/
     if (this.ngxMatTableService.displacementCellCounter !== 0) {
       this.ngxMatTableService.displacementCellCounter--
     }

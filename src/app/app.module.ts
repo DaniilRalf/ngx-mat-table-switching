@@ -20,11 +20,10 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
         AppRoutingModule,
         BrowserAnimationsModule,
         MatTableModule,
-
-
-        NgxMatTableSwitchingModule,
         MatExpansionModule,
-        MatSlideToggleModule
+        MatSlideToggleModule,
+
+        NgxMatTableSwitchingModule
     ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,5 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
+import {
+  NgxMatTableSwitchingService
+} from "../../projects/ngx-mat-table-switching/src/lib/ngx-mat-table-switching.service";
+import {
+  NgxMatTableSwitchingDirective
+} from "../../projects/ngx-mat-table-switching/src/lib/ngx-mat-table-switching.directive";
+import {
+  NgxMatTableSwitchingModule
+} from "../../projects/ngx-mat-table-switching/src/lib/ngx-mat-table-switching.module";
 
 export interface PeriodicElement {
   name: string;
@@ -15,7 +24,6 @@ export interface PeriodicElement {
 export class AppComponent implements OnInit{
   title = 'app-ngx-mat-table-switching';
   // ==== тестировал прямое подключение сервиса из библиотеки
-  // stuff = inject(NgxMatTableSwitchingService)
 
   atgActiveTable = false
 
@@ -33,21 +41,18 @@ export class AppComponent implements OnInit{
   ]
   displayedColumns: string[] = ['name', 'weight', 'symbol']
   dataSource = new MatTableDataSource(this.elementData)
+  // stuff = inject(NgxMatTableSwitchingDirective)
 
-  ngOnInit() {
-    // ==== тестировал прямое подключение сервиса из библиотеки
-    // console.log(this.stuff.doStuff());
-    // console.log(this.stuff.doStuffWithInput('stuff library with input'));
+  constructor() {
   }
 
-
+  ngOnInit() {
+  }
 
   onActiveData(data: any) {
     console.log(data)
   }
   toggleCheckbox(event: any){
-    console.log(event.checked)
-    this.atgActiveTable = event.checked
   }
   onEnter(event: any){
     event.preventDefault()

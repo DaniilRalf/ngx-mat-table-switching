@@ -6,7 +6,6 @@
 
 
 <mat-table [dataSource]="dataSource" class="mat-elevation-z8"
-
            ngxMatTableSwitching [setType]="'table'" [setTagActive]="atgActiveTable"
 >
 
@@ -30,9 +29,7 @@
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row *matRowDef="let row; let index = index; columns: displayedColumns;"
-
-           ngxMatTableSwitching [setType]="'row'" [setIndexRow]="index" [setRow]="row" [setAvailableCell]="['name', 'symbol']"
-           (onActiveData)="onActiveData($event)"
-
+           ngxMatTableSwitching [setType]="'row'" [setIndexRow]="index" [setRow]="row"
+           [setAvailableCell]="['name', 'symbol']" (onActiveData)="onActiveData($event)"
   ></mat-row>
 </mat-table>
