@@ -11,6 +11,7 @@ import {MatTableModule} from "@angular/material/table";
 import {MatExpansionModule} from "@angular/material/expansion";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 
+
 @NgModule({
   declarations: [
     AppComponent

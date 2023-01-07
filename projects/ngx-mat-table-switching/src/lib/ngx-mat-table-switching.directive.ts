@@ -15,7 +15,6 @@ import {NgxMatTableSwitchingService} from "./ngx-mat-table-switching.service";
   selector: '[ngxMatTableSwitching]'
 })
 export class NgxMatTableSwitchingDirective implements OnInit, OnDestroy{
-
   /* * Add or remove the active ROW class depending on the variable*/
   @HostBinding('class.active-class__switching-row') activeRowTrigger = false;
 
@@ -67,9 +66,9 @@ export class NgxMatTableSwitchingDirective implements OnInit, OnDestroy{
       public onEvent(event: KeyboardEvent): void {
         if (this.ngxMatTableService.tagActive) {
           /*
-       * * Click events will be counted on the table element
-       * * Calculate the index of the active row
-       * */
+           * * Click events will be counted on the table element
+           * * Calculate the index of the active row
+           * */
           if (this.type === 'table') {
 
             if (event.code === 'ArrowDown' && this.ngxMatTableService.displacementRowCounter < this.ngxMatTableService.quantityRows ) {
