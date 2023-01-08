@@ -25,7 +25,7 @@ bootstrap: [...]
 export class AppModule { }
 ```
 
-## Использоание функционала
+## Using the functionality
 ### <mat-table>
 | Attribute name       | Attribute type | Status   | Type data     | Description                                                          |
 |----------------------|----------------|----------|---------------|----------------------------------------------------------------------|
@@ -52,6 +52,7 @@ Styling the active cell\
 ... }`
 
 
-## Restrictions
+## Additionally
 - Works only on "mat-table" tables
 - Angular not lower than version 11
+- For more information - ralf.danya@mail.ru
