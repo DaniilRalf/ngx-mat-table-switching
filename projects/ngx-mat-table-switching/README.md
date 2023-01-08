@@ -26,14 +26,14 @@ export class AppModule { }
 ```
 
 ## Using the functionality
-### <mat-table>
+### tag - mat-table
 | Attribute name       | Attribute type | Status   | Type data     | Description                                                          |
 |----------------------|----------------|----------|---------------|----------------------------------------------------------------------|
 | ngxMatTableSwitching | Input          | Required | -             |                                                                      |
 | [setType]            | Input          | Required | 'row'\'table' | Specify the type of the element on which we initialize the directive |
 | [setTagActive]       | Input          | Required | boolean       | If this attribute is true, table navigation mode is active           |
 
-### <mat-row>
+### tag - mat-row
 | Attribute name       | Attribute type | Status     | Type data     | Description                                                                                                                                                                                                                                               |
 |----------------------|----------------|------------|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | ngxMatTableSwitching | Input          | Required   | -             |                                                                                                                                                                                                                                                           |
