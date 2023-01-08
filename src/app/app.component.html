@@ -1,5 +1,35 @@
-<p>test txt</p>
-<p>test txt</p>
-<p>test txt</p>
-<p ngxMatTableSwitching>test txt</p>
+<mat-slide-toggle
+  (change)="toggleCheckbox($event)"
+  (keydown.enter)="onEnter($event)"
+>Slide me!</mat-slide-toggle>
 
+
+
+<mat-table [dataSource]="dataSource" class="mat-elevation-z8"
+           ngxMatTableSwitching [setType]="'table'" [setTagActive]="atgActiveTable"
+>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="weight">
+    <mat-header-cell *matHeaderCellDef> Weight </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.weight}} </mat-cell>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="symbol">
+    <mat-header-cell *matHeaderCellDef> Symbol </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.symbol}} </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; let index = index; columns: displayedColumns;"
+           ngxMatTableSwitching [setType]="'row'" [setIndexRow]="index" [setRow]="row"
+           [setAvailableCell]="['name', 'symbol']" (onActiveData)="onActiveData($event)"
+  ></mat-row>
+</mat-table>
